@@ -54,6 +54,11 @@ public class App extends Application {
     }
 
     @FXML private void showModel(ActionEvent event) {
+        ObjModelImporter meshImporter = new ObjModelImporter();
+        meshImporter.read(getClass().getClassLoader().getResource("Bawl.obj"));
+        // stlImporter.read(getClass().getClassLoader().getResource("CylinderHead-binary.stl"));
+
+        mesh.setMesh(meshImporter.getImport()[0].getMesh());
     }
 
     public static void main(String[] args) {
