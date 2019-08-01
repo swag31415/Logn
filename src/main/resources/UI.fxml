@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.MeshView?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="vbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Logn.App">
+   <children>
+      <MeshView fx:id="mesh" scaleX="300.0" scaleY="300.0" scaleZ="300.0" translateX="1280.0" translateY="540.0">
+         <cursor>
+            <Cursor fx:constant="OPEN_HAND" />
+         </cursor>
+      </MeshView>
+      <Button mnemonicParsing="false" onAction="#showModel" prefHeight="1080.0" prefWidth="640.0" text="BUTTON">
+         <font>
+            <Font name="Arial" size="96.0" />
+         </font>
+      </Button>
+   </children>
+</VBox>
