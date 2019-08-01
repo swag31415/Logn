@@ -26,7 +26,11 @@ repositories {
     jcenter()
 }
 
-dependencies {
+
+dependencies {    
+    // Import ".jar" files in libs
+    compile fileTree(dir: 'libs', include: '*.jar')
+
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-math3:3.6.1'
 
@@ -36,6 +40,3 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
-
-// Define the main class for the application
-mainClassName = 'Logn.App'
