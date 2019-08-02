@@ -1,12 +1,15 @@
 package Logn;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point3D;
 import javafx.scene.Camera;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
@@ -29,7 +32,7 @@ public class App extends Application {
     private FXMLLoader loader;
     private Scene scene;
 
-    boolean ballClicked;
+    private Map<String, Boolean> keyStates;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -65,31 +68,60 @@ public class App extends Application {
         mesh.setMesh(imp.getMesh());
         mesh.setMaterial(imp.getMaterial());
         mesh.requestFocus();
+
+        keyStates = new HashMap<String, Boolean>();
+        keyStates.put("w", false);
+        keyStates.put("s", false);
+        keyStates.put("a", false);
+        keyStates.put("d", false);
+
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                Rotate rY = new Rotate(1, Rotate.Y_AXIS);
+                Rotate rX = new Rotate(1, Rotate.X_AXIS);
+                
+                if (keyStates.get("w")) {
+                    rX.setAngle(2);
+                    mesh.getTransforms().add(rX);
+                }
+
+                if (keyStates.get("s")) {
+                    rX.setAngle(-2);
+                    mesh.getTransforms().add(rX);
+                }
+
+                if (keyStates.get("a")) {
+                    rY.setAngle(-2);
+                    mesh.getTransforms().add(rY);
+                }
+
+                if (keyStates.get("d")) {
+                    rY.setAngle(2);
+                    mesh.getTransforms().add(rY);
+                }
+                
+                try {
+                    Thread.sleep(40);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     @FXML private void keyPressed(KeyEvent event) {
-        Rotate rX = new Rotate(1, Rotate.X_AXIS);
-        Rotate rY = new Rotate(1, Rotate.Y_AXIS);
-        switch (event.getCharacter()) {
-            case "w":
-            rY.setAngle(2);
-            mesh.getTransforms().add(rY);
-                break;
-            case "s":
-            rY.setAngle(-2);
-            mesh.getTransforms().add(rY);
-                break;
-            case "a":
-            rX.setAngle(-2);
-            mesh.getTransforms().add(rX);
-                break;
-            case "d":
-            rX.setAngle(2);
-            mesh.getTransforms().add(rX);
-                break;
-            default:
-            System.out.println(event.getCharacter());
-                break;
+        String text = event.getText();
+        if (keyStates.containsKey(text)) { 
+            keyStates.put(text, true);
+        }
+    }
+
+    @FXML private void keyReleased(KeyEvent event) {
+        String text = event.getText();
+        if (keyStates.containsKey(text)) { 
+            keyStates.put(text, false);
         }
     }
 
