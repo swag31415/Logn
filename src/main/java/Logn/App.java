@@ -1,12 +1,9 @@
 package Logn;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.AmbientLight;
-import javafx.scene.Camera;
-import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -21,8 +18,7 @@ public class App extends Application {
 
     @FXML
     private AmbientLight light;
-    
-    private Camera camera;
+
     private FXMLLoader loader;
     private Scene scene;
 
@@ -36,11 +32,11 @@ public class App extends Application {
         loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("UI.fxml"));
         vbox = loader.<VBox>load();
-        
+
         scene = new Scene(vbox);
 
         vbox.requestFocus();
- 
+
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
@@ -52,9 +48,9 @@ public class App extends Application {
         MeshView sphere = MeshLoader.loadMesh("TheBawl/Bawl3.obj");
         // MeshLoader.loadMesh("TheTeapot/Teapot.obj", mesh);
         vbox.getChildren().add(sphere);
-        
-        sphere.translateXProperty().set(vbox.getWidth()/2);
-        sphere.translateYProperty().set(vbox.getHeight()/2);
+
+        sphere.translateXProperty().set(vbox.getWidth() / 2);
+        sphere.translateYProperty().set(vbox.getHeight() / 2);
         sphere.setScaleX(100);
         sphere.setScaleY(100);
         sphere.setScaleZ(100);
@@ -67,7 +63,8 @@ public class App extends Application {
         processor.start();
     }
 
-    @FXML private void keyPressed(KeyEvent event) {
+    @FXML
+    private void keyPressed(KeyEvent event) {
         if (!initalized) {
             play();
             initalized = true;
@@ -75,7 +72,8 @@ public class App extends Application {
         keyer.reportKeyPressed(event.getCode());
     }
 
-    @FXML private void keyReleased(KeyEvent event) {
+    @FXML
+    private void keyReleased(KeyEvent event) {
         keyer.reportKeyReleased(event.getCode());
     }
 

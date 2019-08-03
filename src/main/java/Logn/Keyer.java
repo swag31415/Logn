@@ -46,7 +46,7 @@ public class Keyer {
         keyStates.put(keyMapping.get(key), false);
     }
 
-    public Map<Press,Boolean> getKeyStates() {
+    public Map<Press, Boolean> getKeyStates() {
         return this.keyStates;
     }
 

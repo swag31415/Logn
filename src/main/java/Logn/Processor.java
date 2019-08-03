@@ -11,7 +11,7 @@ public class Processor extends AnimationTimer {
 
     List<Runnable> runnables;
 
-    public Processor (int loopIntervalMillis) {
+    public Processor(int loopIntervalMillis) {
         this.loopIntervalMillis = loopIntervalMillis;
 
         runnables = new ArrayList<Runnable>();
