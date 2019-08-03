@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.AmbientLight;
 import javafx.scene.Camera;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
@@ -27,6 +28,9 @@ public class App extends Application {
 
     @FXML
     private VBox vbox;
+
+    @FXML
+    private AmbientLight light;
     
     private Camera camera;
     private FXMLLoader loader;
@@ -60,6 +64,8 @@ public class App extends Application {
     }
 
     @FXML private void showModel(ActionEvent event) {
+        light.colorProperty().set(Color.WHITE);
+
         ObjModelImporter meshImporter = new ObjModelImporter();
         
         meshImporter.read(getClass().getClassLoader().getResource("TheBawl/Bawl3.obj"));
