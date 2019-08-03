@@ -1,11 +1,5 @@
 package Logn;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
-
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,13 +12,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.MeshView;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 public class App extends Application {
-
-    @FXML
-    private MeshView mesh;
 
     @FXML
     private VBox vbox;
@@ -36,99 +26,57 @@ public class App extends Application {
     private FXMLLoader loader;
     private Scene scene;
 
-    private Map<String, Boolean> keyStates;
+    Keyer keyer;
+    Processor processor;
+
+    boolean initalized;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        
         loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("UI.fxml"));
         vbox = loader.<VBox>load();
-
-        camera = new PerspectiveCamera(true);
+        
         scene = new Scene(vbox);
-        scene.setFill(Color.SILVER);
-        //Attach to scene
-        scene.setCamera(camera);
- 
-        camera.translateZProperty().set(-2000);
-        camera.translateXProperty().set(960);
-        camera.translateYProperty().set(540);
- 
-        //Set the clipping planes
-        camera.setNearClip(1);
-        camera.setFarClip(30000);
+
+        vbox.requestFocus();
  
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
-    @FXML private void showModel(ActionEvent event) {
+    private void play() {
         light.colorProperty().set(Color.WHITE);
 
-        ObjModelImporter meshImporter = new ObjModelImporter();
+        MeshView sphere = MeshLoader.loadMesh("TheBawl/Bawl3.obj");
+        // MeshLoader.loadMesh("TheTeapot/Teapot.obj", mesh);
+        vbox.getChildren().add(sphere);
         
-        meshImporter.read(getClass().getClassLoader().getResource("TheBawl/Bawl3.obj"));
-        MeshView imp = meshImporter.getImport()[0];
-        
-        mesh.setMesh(imp.getMesh());
-        mesh.setMaterial(imp.getMaterial());
-        mesh.requestFocus();
+        sphere.translateXProperty().set(vbox.getWidth()/2);
+        sphere.translateYProperty().set(vbox.getHeight()/2);
+        sphere.setScaleX(100);
+        sphere.setScaleY(100);
+        sphere.setScaleZ(100);
 
-        keyStates = new HashMap<String, Boolean>();
-        keyStates.put("w", false);
-        keyStates.put("s", false);
-        keyStates.put("a", false);
-        keyStates.put("d", false);
+        keyer = new Keyer();
+        processor = new Processor(40);
 
-        new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                Rotate rY = new Rotate(1, Rotate.Y_AXIS);
-                Rotate rX = new Rotate(1, Rotate.X_AXIS);
-                
-                if (keyStates.get("w")) {
-                    rX.setAngle(2);
-                    mesh.getTransforms().add(rX);
-                }
+        processor.addRunnable(new RotateMesh(sphere, keyer));
 
-                if (keyStates.get("s")) {
-                    rX.setAngle(-2);
-                    mesh.getTransforms().add(rX);
-                }
-
-                if (keyStates.get("a")) {
-                    rY.setAngle(-2);
-                    mesh.getTransforms().add(rY);
-                }
-
-                if (keyStates.get("d")) {
-                    rY.setAngle(2);
-                    mesh.getTransforms().add(rY);
-                }
-                
-                try {
-                    Thread.sleep(40);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+        processor.start();
     }
 
     @FXML private void keyPressed(KeyEvent event) {
-        String text = event.getText();
-        if (keyStates.containsKey(text)) { 
-            keyStates.put(text, true);
+        if (!initalized) {
+            play();
+            initalized = true;
         }
+        keyer.reportKeyPressed(event.getCode());
     }
 
     @FXML private void keyReleased(KeyEvent event) {
-        String text = event.getText();
-        if (keyStates.containsKey(text)) { 
-            keyStates.put(text, false);
-        }
+        keyer.reportKeyReleased(event.getCode());
     }
 
     public static void main(String[] args) {
