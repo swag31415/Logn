@@ -18,7 +18,7 @@ public class MeshLoader {
             meshImporter.read(meshImporter.getClass().getClassLoader().getResource(fileString));
             return meshImporter.getImport()[0];
 
-        case ".stl":
+        case ".stl": // TODO test this
             StlMeshImporter meshImporter2 = new StlMeshImporter();
             meshImporter2.read(meshImporter2.getClass().getClassLoader().getResource(fileString));
             return new MeshView(meshImporter2.getImport());
@@ -27,5 +27,12 @@ public class MeshLoader {
             System.err.println("Unknown mesh file format");
             return null;
         }
+    }
+
+    public static void loadMesh(String fileString, MeshView targetMeshView) {
+        MeshView imp = MeshLoader.loadMesh(fileString);
+        
+        targetMeshView.setMesh(imp.getMesh());
+        targetMeshView.setMaterial(imp.getMaterial());
     }
 }

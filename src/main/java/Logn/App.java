@@ -66,10 +66,7 @@ public class App extends Application {
     @FXML private void showModel(ActionEvent event) {
         light.colorProperty().set(Color.WHITE);
 
-        MeshView imp = MeshLoader.loadMesh("TheBawl/Bawl3.obj");
-        
-        mesh.setMesh(imp.getMesh());
-        mesh.setMaterial(imp.getMaterial());
+        MeshLoader.loadMesh("TheBawl/Bawl3.obj", mesh);
         mesh.requestFocus();
 
         keyStates = new HashMap<String, Boolean>();
