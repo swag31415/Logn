@@ -62,7 +62,7 @@ public class App extends Application {
     @FXML private void showModel(ActionEvent event) {
         ObjModelImporter meshImporter = new ObjModelImporter();
         
-        meshImporter.read(getClass().getClassLoader().getResource("Bawl2.obj"));
+        meshImporter.read(getClass().getClassLoader().getResource("TheBawl/Bawl3.obj"));
         MeshView imp = meshImporter.getImport()[0];
         
         mesh.setMesh(imp.getMesh());
