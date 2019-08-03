@@ -17,9 +17,6 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     @FXML
-    private MeshView mesh;
-
-    @FXML
     private VBox vbox;
 
     @FXML
@@ -32,46 +29,49 @@ public class App extends Application {
     Keyer keyer;
     Processor processor;
 
+    boolean initalized;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        
         loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("UI.fxml"));
         vbox = loader.<VBox>load();
-
-        camera = new PerspectiveCamera(true);
+        
         scene = new Scene(vbox);
-        scene.setFill(Color.SILVER);
-        //Attach to scene
-        scene.setCamera(camera);
- 
-        camera.translateZProperty().set(-2000);
-        camera.translateXProperty().set(960);
-        camera.translateYProperty().set(540);
- 
-        //Set the clipping planes
-        camera.setNearClip(1);
-        camera.setFarClip(30000);
+
+        vbox.requestFocus();
  
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
-    @FXML private void showModel(ActionEvent event) {
+    private void play() {
         light.colorProperty().set(Color.WHITE);
 
-        MeshLoader.loadMesh("TheBawl/Bawl3.obj", mesh);
-        mesh.requestFocus();
+        MeshView sphere = MeshLoader.loadMesh("TheBawl/Bawl3.obj");
+        // MeshLoader.loadMesh("TheTeapot/Teapot.obj", mesh);
+        vbox.getChildren().add(sphere);
+        
+        sphere.translateXProperty().set(vbox.getWidth()/2);
+        sphere.translateYProperty().set(vbox.getHeight()/2);
+        sphere.setScaleX(100);
+        sphere.setScaleY(100);
+        sphere.setScaleZ(100);
 
         keyer = new Keyer();
         processor = new Processor(40);
 
-        processor.addRunnable(new RotateMesh(mesh, keyer));
+        processor.addRunnable(new RotateMesh(sphere, keyer));
 
         processor.start();
     }
 
     @FXML private void keyPressed(KeyEvent event) {
+        if (!initalized) {
+            play();
+            initalized = true;
+        }
         keyer.reportKeyPressed(event.getCode());
     }
 
