@@ -66,10 +66,7 @@ public class App extends Application {
     @FXML private void showModel(ActionEvent event) {
         light.colorProperty().set(Color.WHITE);
 
-        ObjModelImporter meshImporter = new ObjModelImporter();
-        
-        meshImporter.read(getClass().getClassLoader().getResource("TheBawl/Bawl3.obj"));
-        MeshView imp = meshImporter.getImport()[0];
+        MeshView imp = MeshLoader.loadMesh("TheBawl/Bawl3.obj");
         
         mesh.setMesh(imp.getMesh());
         mesh.setMaterial(imp.getMaterial());
