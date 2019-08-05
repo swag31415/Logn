@@ -1,23 +1,26 @@
 package Logn;
 
 import Logn.Keyer.Press;
+import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.transform.Rotate;
 
-public class RotateMesh implements Runnable {
+public class WASDRotateMesh implements Runnable {
 
     private Node node;
+    private Point3D center;
     private Keyer keyer;
 
-    public RotateMesh(Node node, Keyer keyer) {
+    public WASDRotateMesh(Node node, Point3D center, Keyer keyer) {
         this.node = node;
+        this.center = center;
         this.keyer = keyer;
     }
 
     @Override
     public void run() {
-        Rotate rY = new Rotate(1, Rotate.Y_AXIS);
-        Rotate rX = new Rotate(1, Rotate.X_AXIS);
+        Rotate rY = new Rotate(1, center.getX(), center.getY(), center.getZ(), Rotate.Y_AXIS);
+        Rotate rX = new Rotate(1, center.getX(), center.getY(), center.getZ(), Rotate.X_AXIS);
 
         if (keyer.getKeyStates().get(Press.up)) {
             rX.setAngle(2);
