@@ -63,15 +63,11 @@ public class App extends Application {
 
         stackPane.getChildren().addAll(sphere, teapot);
 
-        // sphere.translateXProperty().set(vbox.getWidth() / 2);
-        // sphere.translateYProperty().set(vbox.getHeight() / 2);
         sphere.setScaleX(300);
         sphere.setScaleY(300);
         sphere.setScaleZ(300);
 
-        // teapot.translateXProperty().set(sphere.getTranslateX());
         teapot.translateYProperty().set(/*sphere.getTranslateY()*/ -300);
-        // teapot.translateZProperty().set(sphere.getTranslateZ() - 300);
 
         keyer = new Keyer();
         processor = new Processor(40);
