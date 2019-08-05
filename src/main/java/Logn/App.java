@@ -67,7 +67,7 @@ public class App extends Application {
         sphere.setScaleY(300);
         sphere.setScaleZ(300);
 
-        teapot.translateYProperty().set(/*sphere.getTranslateY()*/ -300);
+        teapot.translateYProperty().set(- 300);
 
         keyer = new Keyer();
         processor = new Processor(40);
