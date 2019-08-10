@@ -17,3 +17,6 @@ bin
 # Ignore AppData
 *.cuberLog
 *.csv
+
+# Ignore DLLs
+*.dll
