@@ -11,6 +11,9 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.7'
 }
 
+def jmerepo='com.github.jmonkeyengine.jMonkeyEngine'
+def jmeversion='v3.2.0-stable'
+
 javafx {
     version = "12.0.1"
     modules = ['javafx.fxml', 'javafx.controls']
@@ -24,12 +27,20 @@ repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
-}
 
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
 
 dependencies {    
     // Import ".jar" files in libs
     compile fileTree(dir: 'libs', include: '*.jar')
+
+    compile jmerepo + ':jme3-core:' + jmeversion
+    compile jmerepo + ':jme3-desktop:' + jmeversion
+    compile jmerepo + ':jme3-lwjgl:' + jmeversion
+    compile jmerepo + ':jme3-android:' + jmeversion
+    compile jmerepo + ':jme3-terrain:' + jmeversion
 
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-math3:3.6.1'
