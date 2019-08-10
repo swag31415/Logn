@@ -31,7 +31,7 @@ public class MeshLoader {
 
     public static void loadMesh(String fileString, MeshView targetMeshView) {
         MeshView imp = MeshLoader.loadMesh(fileString);
-        
+
         targetMeshView.setMesh(imp.getMesh());
         targetMeshView.setMaterial(imp.getMaterial());
     }

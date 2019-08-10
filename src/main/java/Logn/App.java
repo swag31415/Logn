@@ -1,15 +1,14 @@
 package Logn;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
-import javafx.scene.Camera;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.MeshView;
 import javafx.stage.Stage;
@@ -17,14 +16,14 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     @FXML
-    private VBox vbox;
+    private StackPane stackPane;
 
     @FXML
     private AmbientLight light;
-    
-    private Camera camera;
+
     private FXMLLoader loader;
     private Scene scene;
+    private PerspectiveCamera camera;
 
     Keyer keyer;
     Processor processor;
@@ -35,12 +34,18 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("UI.fxml"));
-        vbox = loader.<VBox>load();
-        
-        scene = new Scene(vbox);
+        stackPane = loader.<StackPane>load();
 
-        vbox.requestFocus();
- 
+        scene = new Scene(stackPane, stackPane.getWidth(), stackPane.getHeight(), true);
+        camera = new PerspectiveCamera(true);
+        scene.setCamera(camera);
+        camera.translateXProperty().set(stackPane.getPrefWidth() / 2);
+        camera.translateYProperty().set(stackPane.getPrefHeight() / 2);
+        camera.setFarClip(30000);
+        camera.translateZProperty().set(-2000);
+
+        stackPane.requestFocus();
+
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
@@ -50,24 +55,28 @@ public class App extends Application {
         light.colorProperty().set(Color.WHITE);
 
         MeshView sphere = MeshLoader.loadMesh("TheBawl/Bawl3.obj");
-        // MeshLoader.loadMesh("TheTeapot/Teapot.obj", mesh);
-        vbox.getChildren().add(sphere);
-        
-        sphere.translateXProperty().set(vbox.getWidth()/2);
-        sphere.translateYProperty().set(vbox.getHeight()/2);
-        sphere.setScaleX(100);
-        sphere.setScaleY(100);
-        sphere.setScaleZ(100);
+        MeshView teapot = MeshLoader.loadMesh("TheTeapot/Teapot.obj");
+
+        stackPane.getChildren().addAll(sphere, teapot);
+
+        sphere.setScaleX(300);
+        sphere.setScaleY(300);
+        sphere.setScaleZ(300);
+
+        teapot.translateYProperty().set(- 300);
 
         keyer = new Keyer();
         processor = new Processor(40);
 
-        processor.addRunnable(new RotateMesh(sphere, keyer));
+        processor.addRunnable(new WASDRotateMesh(sphere, Point3D.ZERO, keyer));
+        processor.addRunnable(new WASDRotateMesh(teapot, new Point3D(0, 300, 0), keyer));
+        processor.addRunnable(new MousePan(keyer, stackPane.getScene().getWindow(), (PerspectiveCamera) stackPane.getScene().getCamera()));
 
         processor.start();
     }
 
-    @FXML private void keyPressed(KeyEvent event) {
+    @FXML
+    private void keyPressed(KeyEvent event) {
         if (!initalized) {
             play();
             initalized = true;
@@ -75,7 +84,8 @@ public class App extends Application {
         keyer.reportKeyPressed(event.getCode());
     }
 
-    @FXML private void keyReleased(KeyEvent event) {
+    @FXML
+    private void keyReleased(KeyEvent event) {
         keyer.reportKeyReleased(event.getCode());
     }
 
