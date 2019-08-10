@@ -9,15 +9,11 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.MeshView;
 import javafx.stage.Stage;
 
 public class App extends Application {
-
-    @FXML
-    private VBox vbox;
 
     @FXML
     private StackPane stackPane;
@@ -38,17 +34,17 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("UI.fxml"));
-        vbox = loader.<VBox>load();
+        stackPane = loader.<StackPane>load();
 
-        scene = new Scene(vbox, vbox.getWidth(), vbox.getHeight(), true);
+        scene = new Scene(stackPane, stackPane.getWidth(), stackPane.getHeight(), true);
         camera = new PerspectiveCamera(true);
         scene.setCamera(camera);
-        camera.translateXProperty().set(vbox.getPrefWidth() / 2);
-        camera.translateYProperty().set(vbox.getPrefHeight() / 2);
+        camera.translateXProperty().set(stackPane.getPrefWidth() / 2);
+        camera.translateYProperty().set(stackPane.getPrefHeight() / 2);
         camera.setFarClip(30000);
         camera.translateZProperty().set(-2000);
 
-        vbox.requestFocus();
+        stackPane.requestFocus();
 
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
@@ -74,7 +70,7 @@ public class App extends Application {
 
         processor.addRunnable(new WASDRotateMesh(sphere, Point3D.ZERO, keyer));
         processor.addRunnable(new WASDRotateMesh(teapot, new Point3D(0, 300, 0), keyer));
-        processor.addRunnable(new MousePan(keyer, vbox.getScene().getWindow(), (PerspectiveCamera) stackPane.getScene().getCamera()));
+        processor.addRunnable(new MousePan(keyer, stackPane.getScene().getWindow(), (PerspectiveCamera) stackPane.getScene().getCamera()));
 
         processor.start();
     }
